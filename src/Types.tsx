@@ -1,22 +1,18 @@
 export type PlanetsType = {
-  name: string,
-  rotation_period: string,
-  orbital_period: string,
-  diameter: string,
-  climate: string,
-  gravity: string,
-  terrain: string,
-  surface_water: string,
-  population: string,
-  films: string [],
-  created: string,
-  edited: string,
-  url: string
+  [key: string]: string | string[]
+  films: string[]
+};
+
+export type FormFilter = {
+  category: string,
+  operator: string,
+  number: string,
 };
 
 export type ContextPlanetsType = {
   planets: PlanetsType[],
   filterPlanets: PlanetsType[],
+  numberFilter: (filter: FormFilter) => void,
   nameFilter: (filter: string) => void
   // tooglePlanets: (planet: PlanetsType[]) => void
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PlanetContext from './context/PlanetContext';
-import { PlanetsType } from '../Types';
+import { FormFilter, PlanetsType } from '../Types';
 
 type PlanetProviderProps = {
   children: React.ReactNode;
@@ -39,8 +39,35 @@ function PlanetProvider({ children }: PlanetProviderProps) {
   }]);
   const nameFilter = (filter: string) => {
     const filteredPlanets = planets
-      .filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase()));
+      .filter((element) => {
+        const { name } = element;
+        const newName = name as string;
+        return newName.toLowerCase().includes(filter.toLowerCase());
+      });
     setFilterPlanets(filteredPlanets);
+  };
+  const operatorValidation = (filter: FormFilter) => {
+    const { category, number, operator } = filter;
+    switch (operator) {
+      case 'maior que':
+        return (filterPlanets.filter((element) => {
+          return (Number(element[category]) > Number(number));
+        }));
+      case 'menor que':
+        return (filterPlanets.filter((element) => {
+          return Number(element[category]) < Number(number);
+        }));
+      case 'igual a':
+        return (filterPlanets.filter((element) => {
+          return Number(element[category]) === Number(number);
+        }));
+      default:
+        return planets;
+    }
+  };
+  const numberFilter = (filter: FormFilter) => {
+    const planetsFilter = operatorValidation(filter);
+    setFilterPlanets(planetsFilter);
   };
   // function tooglePlanets(planet: PlanetsType[]) {
   //   setPlanets(planet);
@@ -60,6 +87,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     planets,
     filterPlanets,
     nameFilter,
+    numberFilter,
     // tooglePlanets,
   };
   return (
