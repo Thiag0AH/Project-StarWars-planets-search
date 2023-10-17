@@ -16,5 +16,7 @@ export type PlanetsType = {
 
 export type ContextPlanetsType = {
   planets: PlanetsType[],
-  tooglePlanets: (planet: PlanetsType[]) => void
+  filterPlanets: PlanetsType[],
+  nameFilter: (filter: string) => void
+  // tooglePlanets: (planet: PlanetsType[]) => void
 };
