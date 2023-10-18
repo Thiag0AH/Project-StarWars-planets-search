@@ -7,6 +7,7 @@ type PlanetProviderProps = {
 };
 
 function PlanetProvider({ children }: PlanetProviderProps) {
+  // const [filterList, setFilterList] = useState<PlanetsType[]>([]);
   const [planets, setPlanets] = useState<PlanetsType[]>([{
     name: '',
     rotation_period: '',
@@ -67,7 +68,10 @@ function PlanetProvider({ children }: PlanetProviderProps) {
   };
   const numberFilter = (filter: FormFilter) => {
     const planetsFilter = operatorValidation(filter);
-    setFilterPlanets(planetsFilter);
+    const aux = filterPlanets.filter((element) => {
+      return (planetsFilter.includes(element) && filterPlanets.includes(element));
+    });
+    setFilterPlanets(aux);
   };
   // function tooglePlanets(planet: PlanetsType[]) {
   //   setPlanets(planet);

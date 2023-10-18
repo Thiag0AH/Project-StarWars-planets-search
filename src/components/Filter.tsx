@@ -24,7 +24,7 @@ function Filter() {
       [name]: value,
     });
   }
-  const handleFilterSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     numberFilter(formFilter);
   };
