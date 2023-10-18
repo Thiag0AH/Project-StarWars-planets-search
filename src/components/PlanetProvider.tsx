@@ -74,9 +74,18 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     });
     setFilterPlanets(aux);
   };
-  // function tooglePlanets(planet: PlanetsType[]) {
-  //   setPlanets(planet);
-  // }
+  const removeFilter = () => {
+    setFilterList([]);
+    setFilterPlanets(planets);
+  };
+  const removeNumberFilter = (id: number) => {
+    const aux = filterList.filter((element, i) => i !== id);
+    removeFilter();
+    setFilterList(aux);
+    filterList.forEach((filter) => {
+      numberFilter(filter);
+    });
+  };
   useEffect(() => {
     const fetchPlanet = async () => {
       const response = await fetch('https://swapi.dev/api/planets');
@@ -94,6 +103,8 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     nameFilter,
     numberFilter,
     filterList,
+    removeFilter,
+    removeNumberFilter,
   };
   return (
     <PlanetContext.Provider value={ values }>

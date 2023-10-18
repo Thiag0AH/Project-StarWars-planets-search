@@ -4,7 +4,7 @@ import { FormFilter } from '../Types';
 
 function Filter() {
   const planetContext = useContext(PlanetContext);
-  const { numberFilter, filterList } = planetContext;
+  const { numberFilter, filterList, removeFilter, removeNumberFilter } = planetContext;
   const [formFilter, setFormFilter] = useState<FormFilter>({
     category: 'population',
     operator: 'maior que',
@@ -89,9 +89,20 @@ function Filter() {
         />
         <button data-testid="button-filter" type="submit">Filtrar</button>
       </form>
+      <button
+        data-testid="button-remove-filters"
+        type="button"
+        onClick={ removeFilter }
+      >
+        Remover Filtros
+
+      </button>
       {filterList.map((element, i) => {
         return (
-          <p key={ i }>{ `${element.category} ${element.operator} ${element.number}` }</p>
+          <div key={ i } data-testid="filter">
+            <p>{ `${element.category} ${element.operator} ${element.number}` }</p>
+            <button onClick={ () => removeNumberFilter(i) }>Excluir</button>
+          </div>
         );
       })}
     </div>

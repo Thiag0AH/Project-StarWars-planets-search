@@ -14,5 +14,7 @@ export type ContextPlanetsType = {
   filterPlanets: PlanetsType[],
   numberFilter: (filter: FormFilter) => void,
   nameFilter: (filter: string) => void,
-  filterList: FormFilter[]
+  filterList: FormFilter[],
+  removeFilter: () => void,
+  removeNumberFilter: (id: number) => void
 };
