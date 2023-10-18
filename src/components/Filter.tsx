@@ -26,6 +26,11 @@ function Filter() {
   }
   const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormFilter({
+      category: 'population',
+      operator: 'maior que',
+      number: '0',
+    });
     numberFilter(formFilter);
   };
   const handleOption = (category: string) => {
@@ -57,7 +62,6 @@ function Filter() {
         <select
           data-testid="column-filter"
           name="category"
-          defaultValue="population"
           onChange={ (e) => handleChange(e) }
         >
           { handleOption('population')
