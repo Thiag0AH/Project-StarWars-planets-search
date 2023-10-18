@@ -66,6 +66,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
         return planets;
     }
   };
+
   const numberFilter = (filter: FormFilter) => {
     setFilterList((prev) => [...prev, filter]);
     const planetsFilter = operatorValidation(filter);
@@ -78,14 +79,14 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     setFilterList([]);
     setFilterPlanets(planets);
   };
-  const removeNumberFilter = (id: number) => {
-    const aux = filterList.filter((element, i) => i !== id);
-    removeFilter();
-    setFilterList(aux);
-    filterList.forEach((filter) => {
-      numberFilter(filter);
-    });
-  };
+  // const removeNumberFilter = (id: number) => {
+  //   const aux = filterList.filter((element, i) => i !== id);
+  //   removeFilter();
+  //   console.log(filterPlanets);
+  //   if (aux.length > 0) {
+  //     aux.map((element) => numberFilter(element));
+  //   }
+  // };
   useEffect(() => {
     const fetchPlanet = async () => {
       const response = await fetch('https://swapi.dev/api/planets');
@@ -100,11 +101,10 @@ function PlanetProvider({ children }: PlanetProviderProps) {
   const values = {
     planets,
     filterPlanets,
+    filterList,
     nameFilter,
     numberFilter,
-    filterList,
     removeFilter,
-    removeNumberFilter,
   };
   return (
     <PlanetContext.Provider value={ values }>

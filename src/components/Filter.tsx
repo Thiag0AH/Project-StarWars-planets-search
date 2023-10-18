@@ -4,7 +4,7 @@ import { FormFilter } from '../Types';
 
 function Filter() {
   const planetContext = useContext(PlanetContext);
-  const { numberFilter, filterList, removeFilter, removeNumberFilter } = planetContext;
+  const { numberFilter, filterList, removeFilter, filterPlanets } = planetContext;
   const [formFilter, setFormFilter] = useState<FormFilter>({
     category: 'population',
     operator: 'maior que',
@@ -32,6 +32,14 @@ function Filter() {
     const categories = filterList.map((list) => list.category);
     return !(categories.includes(category));
   };
+  const removeNumberFilter = (id: number) => {
+    const aux = filterList.filter((element, i) => i !== id);
+    removeFilter();
+    console.log(filterPlanets);
+    if (aux.length > 0) {
+      aux.map((element) => numberFilter(element));
+    }
+  };
   return (
     <div>
       <label>
@@ -49,19 +57,19 @@ function Filter() {
         <select
           data-testid="column-filter"
           name="category"
+          defaultValue="population"
           onChange={ (e) => handleChange(e) }
-          required
         >
-          {handleOption('population')
-          && <option value="population" selected>population</option>}
+          { handleOption('population')
+            && <option value="population">population</option>}
           {handleOption('orbital_period')
-          && <option value="orbital_period">orbital_period</option>}
+            && <option value="orbital_period">orbital_period</option>}
           {handleOption('diameter')
-          && <option value="diameter">diameter</option>}
+            && <option value="diameter">diameter</option>}
           {handleOption('rotation_period')
-          && <option value="rotation_period">rotation_period</option>}
+            && <option value="rotation_period">rotation_period</option>}
           {handleOption('surface_water')
-          && <option value="surface_water">surface_water</option>}
+            && <option value="surface_water">surface_water</option>}
         </select>
         <select
           data-testid="comparison-filter"
