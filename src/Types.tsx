@@ -13,6 +13,6 @@ export type ContextPlanetsType = {
   planets: PlanetsType[],
   filterPlanets: PlanetsType[],
   numberFilter: (filter: FormFilter) => void,
-  nameFilter: (filter: string) => void
-  // tooglePlanets: (planet: PlanetsType[]) => void
+  nameFilter: (filter: string) => void,
+  filterList: FormFilter[]
 };

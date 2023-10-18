@@ -7,7 +7,7 @@ type PlanetProviderProps = {
 };
 
 function PlanetProvider({ children }: PlanetProviderProps) {
-  // const [filterList, setFilterList] = useState<PlanetsType[]>([]);
+  const [filterList, setFilterList] = useState<FormFilter[]>([]);
   const [planets, setPlanets] = useState<PlanetsType[]>([{
     name: '',
     rotation_period: '',
@@ -67,6 +67,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     }
   };
   const numberFilter = (filter: FormFilter) => {
+    setFilterList((prev) => [...prev, filter]);
     const planetsFilter = operatorValidation(filter);
     const aux = filterPlanets.filter((element) => {
       return (planetsFilter.includes(element) && filterPlanets.includes(element));
@@ -92,7 +93,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     filterPlanets,
     nameFilter,
     numberFilter,
-    // tooglePlanets,
+    filterList,
   };
   return (
     <PlanetContext.Provider value={ values }>

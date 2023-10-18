@@ -4,7 +4,7 @@ import { FormFilter } from '../Types';
 
 function Filter() {
   const planetContext = useContext(PlanetContext);
-  const { numberFilter } = planetContext;
+  const { numberFilter, filterList } = planetContext;
   const [formFilter, setFormFilter] = useState<FormFilter>({
     category: 'population',
     operator: 'maior que',
@@ -28,6 +28,10 @@ function Filter() {
     e.preventDefault();
     numberFilter(formFilter);
   };
+  const handleOption = (category: string) => {
+    const categories = filterList.map((list) => list.category);
+    return !(categories.includes(category));
+  };
   return (
     <div>
       <label>
@@ -48,21 +52,16 @@ function Filter() {
           onChange={ (e) => handleChange(e) }
           required
         >
-          <option value="population" selected>
-            population
-          </option>
-          <option value="orbital_period">
-            orbital_period
-          </option>
-          <option value="diameter">
-            diameter
-          </option>
-          <option value="rotation_period">
-            rotation_period
-          </option>
-          <option value="surface_water">
-            surface_water
-          </option>
+          {handleOption('population')
+          && <option value="population" selected>population</option>}
+          {handleOption('orbital_period')
+          && <option value="orbital_period">orbital_period</option>}
+          {handleOption('diameter')
+          && <option value="diameter">diameter</option>}
+          {handleOption('rotation_period')
+          && <option value="rotation_period">rotation_period</option>}
+          {handleOption('surface_water')
+          && <option value="surface_water">surface_water</option>}
         </select>
         <select
           data-testid="comparison-filter"
@@ -90,6 +89,11 @@ function Filter() {
         />
         <button data-testid="button-filter" type="submit">Filtrar</button>
       </form>
+      {filterList.map((element, i) => {
+        return (
+          <p key={ i }>{ `${element.category} ${element.operator} ${element.number}` }</p>
+        );
+      })}
     </div>
   );
 }
