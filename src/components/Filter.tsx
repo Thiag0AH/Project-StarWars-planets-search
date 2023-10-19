@@ -1,10 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PlanetContext from './context/PlanetContext';
 import { FormFilter } from '../Types';
 
 function Filter() {
   const planetContext = useContext(PlanetContext);
   const { numberFilter, filterList, removeFilter, filterPlanets } = planetContext;
+  const array = [
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+  ];
+  const [option, setOption] = useState(array);
   const [formFilter, setFormFilter] = useState<FormFilter>({
     category: 'population',
     operator: 'maior que',
@@ -12,12 +16,19 @@ function Filter() {
   });
   const [busca, setBusca] = useState('');
   const { nameFilter } = planetContext;
+  useEffect(() => {
+    setFormFilter({
+      category: option[0],
+      operator: 'maior que',
+      number: '0',
+    });
+  }, [option.length]);
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     nameFilter(value);
     setBusca(value);
   };
-  function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
     setFormFilter({
       ...formFilter,
@@ -26,24 +37,22 @@ function Filter() {
   }
   const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormFilter({
-      category: 'population',
-      operator: 'maior que',
-      number: '0',
-    });
+    handleOption(formFilter.category);
+
     numberFilter(formFilter);
   };
   const handleOption = (category: string) => {
-    const categories = filterList.map((list) => list.category);
-    return !(categories.includes(category));
+    setOption(option.filter((element) => element !== category));
   };
   const removeNumberFilter = (id: number) => {
     const aux = filterList.filter((element, i) => i !== id);
+    const categories = aux.map((element) => element.category);
     removeFilter();
-    console.log(filterPlanets);
     if (aux.length > 0) {
-      aux.map((element) => numberFilter(element));
+      // aux.map((element) => numberFilter(element));
+      planetContext.setFilterPlanets(numberFilter(aux));
     }
+    setOption(array.filter((element) => !categories.includes(element)));
   };
   return (
     <div>
@@ -62,18 +71,14 @@ function Filter() {
         <select
           data-testid="column-filter"
           name="category"
+          value={ formFilter.category }
           onChange={ (e) => handleChange(e) }
         >
-          { handleOption('population')
-            && <option value="population">population</option>}
-          {handleOption('orbital_period')
-            && <option value="orbital_period">orbital_period</option>}
-          {handleOption('diameter')
-            && <option value="diameter">diameter</option>}
-          {handleOption('rotation_period')
-            && <option value="rotation_period">rotation_period</option>}
-          {handleOption('surface_water')
-            && <option value="surface_water">surface_water</option>}
+          {option.map((element) => {
+            return (
+              <option key={ element } value={ element }>{element}</option>
+            );
+          })}
         </select>
         <select
           data-testid="comparison-filter"

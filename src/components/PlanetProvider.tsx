@@ -67,13 +67,16 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     }
   };
 
-  const numberFilter = (filter: FormFilter) => {
-    setFilterList((prev) => [...prev, filter]);
-    const planetsFilter = operatorValidation(filter);
-    const aux = filterPlanets.filter((element) => {
-      return (planetsFilter.includes(element) && filterPlanets.includes(element));
+  const numberFilter = (filter: FormFilter[]) => {
+    const array = [];
+    filter.forEach((element) => {
+      const planetsFilter = operatorValidation(element);
+      const aux = filterPlanets.filter((planet) => {
+        return (planetsFilter.includes(planet) && filterPlanets.includes(planet));
+      });
+      array.push(aux);
     });
-    setFilterPlanets(aux);
+    return array
   };
   const removeFilter = () => {
     setFilterList([]);
@@ -101,6 +104,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
   const values = {
     planets,
     filterPlanets,
+    setFilterPlanets,
     filterList,
     nameFilter,
     numberFilter,

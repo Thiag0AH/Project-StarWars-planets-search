@@ -13,7 +13,8 @@ export type ContextPlanetsType = {
   planets: PlanetsType[],
   filterPlanets: PlanetsType[],
   filterList: FormFilter[],
-  numberFilter: (filte: FormFilter) => void,
+  setFilterPlanets: (value: React.SetStateAction<PlanetsType[]>) => void
+  numberFilter: (filte: FormFilter []) => [],
   nameFilter: (filter: string) => void,
   removeFilter: () => void,
   // removeNumberFilter: (id: number) => void,
