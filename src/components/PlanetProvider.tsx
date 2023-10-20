@@ -86,7 +86,8 @@ function PlanetProvider({ children }: PlanetProviderProps) {
 
   useEffect(() => {
     const sortTable = () => {
-      const aux = filterPlanets.toSorted((a, b) => {
+      const aux = filterPlanets;
+      aux.sort((a, b) => {
         if (a[sortPlanets.order.column] === 'unknown') {
           return 1;
         }
@@ -100,7 +101,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
         }
         return auxB - auxA;
       });
-      setFilterPlanets(aux);
+      setFilterPlanets([...aux]);
     };
     sortTable();
   }, [sortPlanets]);
@@ -108,14 +109,7 @@ function PlanetProvider({ children }: PlanetProviderProps) {
   const handleSortPlanets = (sort: SortType) => {
     setSort(sort);
   };
-  // const removeNumberFilter = (id: number) => {
-  //   const aux = filterList.filter((element, i) => i !== id);
-  //   removeFilter();
-  //   console.log(filterPlanets);
-  //   if (aux.length > 0) {
-  //     aux.map((element) => numberFilter(element));
-  //   }
-  // };
+
   useEffect(() => {
     const fetchPlanet = async () => {
       const response = await fetch('https://swapi.dev/api/planets');

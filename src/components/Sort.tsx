@@ -53,7 +53,7 @@ function Sort() {
         data-testid="column-sort-input-asc"
         value="ASC"
         type="radio"
-        name="Asc"
+        name="Sort"
         id=""
       />
       <label htmlFor="Desc">Descendente</label>
@@ -62,7 +62,7 @@ function Sort() {
         data-testid="column-sort-input-desc"
         value="DESC"
         type="radio"
-        name="Desc"
+        name="Sort"
         id=""
       />
       <button
