@@ -27,7 +27,7 @@ function Table() {
         {filterPlanets.map((element, i) => {
           return (
             <tr key={ i }>
-              <th>{element.name}</th>
+              <th data-testid="planet-name">{element.name}</th>
               <th>{element.rotation_period}</th>
               <th>{element.orbital_period}</th>
               <th>{element.diameter}</th>

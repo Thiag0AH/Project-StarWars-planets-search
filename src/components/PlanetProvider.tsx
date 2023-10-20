@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PlanetContext from './context/PlanetContext';
-import { FormFilter, PlanetsType } from '../Types';
+import { FormFilter, PlanetsType, SortType } from '../Types';
 
 type PlanetProviderProps = {
   children: React.ReactNode;
@@ -8,6 +8,12 @@ type PlanetProviderProps = {
 
 function PlanetProvider({ children }: PlanetProviderProps) {
   const [filterList, setFilterList] = useState<FormFilter[]>([]);
+  const [sortPlanets, setSort] = useState<SortType>({
+    order: {
+      column: 'population',
+      sort: 'ASC',
+    },
+  });
   const [planets, setPlanets] = useState<PlanetsType[]>([{
     name: '',
     rotation_period: '',
@@ -47,40 +53,60 @@ function PlanetProvider({ children }: PlanetProviderProps) {
       });
     setFilterPlanets(filteredPlanets);
   };
-  const operatorValidation = (filter: FormFilter) => {
-    const { category, number, operator } = filter;
-    switch (operator) {
-      case 'maior que':
-        return (filterPlanets.filter((element) => {
-          return (Number(element[category]) > Number(number));
-        }));
-      case 'menor que':
-        return (filterPlanets.filter((element) => {
-          return Number(element[category]) < Number(number);
-        }));
-      case 'igual a':
-        return (filterPlanets.filter((element) => {
-          return Number(element[category]) === Number(number);
-        }));
-      default:
-        return planets;
-    }
-  };
+  useEffect(() => {
+    const operatorValidation = (element: PlanetsType) => {
+      return filterList.every((filter: FormFilter) => {
+        const { operator, category, number } = filter;
+        switch (operator) {
+          case 'maior que':
+            return (Number(element[category]) > Number(number));
+          case 'menor que':
 
-  const numberFilter = (filter: FormFilter[]) => {
-    const array = [];
-    filter.forEach((element) => {
-      const planetsFilter = operatorValidation(element);
-      const aux = filterPlanets.filter((planet) => {
-        return (planetsFilter.includes(planet) && filterPlanets.includes(planet));
+            return (Number(element[category]) < Number(number));
+
+          case 'igual a':
+
+            return (Number(element[category]) === Number(number));
+          default:
+            return true;
+        }
       });
-      array.push(aux);
-    });
-    return array
+    };
+
+    const aux = filterPlanets.filter((element) => operatorValidation(element));
+    setFilterPlanets(aux);
+  }, [filterList]);
+  const numberFilter = (filter: FormFilter) => {
+    setFilterList((prev) => [...prev, filter]);
   };
   const removeFilter = () => {
     setFilterList([]);
     setFilterPlanets(planets);
+  };
+
+  useEffect(() => {
+    const sortTable = () => {
+      const aux = filterPlanets.toSorted((a, b) => {
+        if (a[sortPlanets.order.column] === 'unknown') {
+          return 1;
+        }
+        if (b[sortPlanets.order.column] === 'unknown') {
+          return -1;
+        }
+        const auxA = Number(a[sortPlanets.order.column]);
+        const auxB = Number(b[sortPlanets.order.column]);
+        if (sortPlanets.order.sort === 'ASC') {
+          return auxA - auxB;
+        }
+        return auxB - auxA;
+      });
+      setFilterPlanets(aux);
+    };
+    sortTable();
+  }, [sortPlanets]);
+
+  const handleSortPlanets = (sort: SortType) => {
+    setSort(sort);
   };
   // const removeNumberFilter = (id: number) => {
   //   const aux = filterList.filter((element, i) => i !== id);
@@ -102,13 +128,12 @@ function PlanetProvider({ children }: PlanetProviderProps) {
     fetchPlanet();
   }, []);
   const values = {
-    planets,
     filterPlanets,
-    setFilterPlanets,
     filterList,
     nameFilter,
     numberFilter,
     removeFilter,
+    handleSortPlanets,
   };
   return (
     <PlanetContext.Provider value={ values }>

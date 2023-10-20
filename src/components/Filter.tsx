@@ -4,7 +4,7 @@ import { FormFilter } from '../Types';
 
 function Filter() {
   const planetContext = useContext(PlanetContext);
-  const { numberFilter, filterList, removeFilter, filterPlanets } = planetContext;
+  const { numberFilter, filterList, removeFilter } = planetContext;
   const array = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
   ];
@@ -22,23 +22,24 @@ function Filter() {
       operator: 'maior que',
       number: '0',
     });
-  }, [option.length]);
+  }, [option]);
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     nameFilter(value);
     setBusca(value);
   };
-  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>
+  | React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormFilter({
       ...formFilter,
       [name]: value,
     });
   }
+
   const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleOption(formFilter.category);
-
     numberFilter(formFilter);
   };
   const handleOption = (category: string) => {
@@ -49,8 +50,7 @@ function Filter() {
     const categories = aux.map((element) => element.category);
     removeFilter();
     if (aux.length > 0) {
-      // aux.map((element) => numberFilter(element));
-      planetContext.setFilterPlanets(numberFilter(aux));
+      aux.map((element) => numberFilter(element));
     }
     setOption(array.filter((element) => !categories.includes(element)));
   };
@@ -117,7 +117,7 @@ function Filter() {
       {filterList.map((element, i) => {
         return (
           <div key={ i } data-testid="filter">
-            <p>{ `${element.category} ${element.operator} ${element.number}` }</p>
+            <p>{ `${element.category}  ${element.operator} ${element.number} ` }</p>
             <button onClick={ () => removeNumberFilter(i) }>Excluir</button>
           </div>
         );
